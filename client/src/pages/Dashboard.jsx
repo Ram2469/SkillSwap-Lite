@@ -86,7 +86,7 @@ const Dashboard = () => {
         }
     };
 
-    const handleInterest = async (postId) => {
+    const handleInterest = async (post) => {
         try {
             const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/interests', {
                 method: 'POST',
@@ -94,14 +94,18 @@ const Dashboard = () => {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ postId }),
+                body: JSON.stringify({ postId: post._id }),
             });
             if (res.ok) {
-                setInterestedPosts((prev) => [...prev, postId]);
+                setInterestedPosts((prev) => [...prev, post._id]);
+                alert(`Contact ${post.user.name} at: ${post.user.email}\n\nI am highly interested in your post about ${post.skillOffered} -> ${post.skillWanted}.`);
+                const subject = encodeURIComponent(`Interest in your SkillSwap post (${post.skillOffered} -> ${post.skillWanted})`);
+                const body = encodeURIComponent(`Hi ${post.user.name},\n\nI am highly interested in your post offering ${post.skillOffered} and looking for ${post.skillWanted}.\n\nPlease let me know when you are available to chat!`);
+                window.location.href = `mailto:${post.user.email}?subject=${subject}&body=${body}`;
             } else {
                 const data = await res.json();
                 if (data.message === 'Already expressed interest in this post') {
-                    setInterestedPosts((prev) => [...prev, postId]);
+                    setInterestedPosts((prev) => [...prev, post._id]);
                 } else {
                     alert(data.message || 'Action failed');
                 }
@@ -214,17 +218,17 @@ const Dashboard = () => {
                         <h2 className="text-2xl font-extrabold text-slate-800 mb-6">Explore Knowledge Exchange</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {posts.map((post) => {
-                                const isOwner = post.user._id === user?.id;
+                                const isOwner = post.user?._id === user?.id;
 
                                 return (
                                     <div key={post._id} className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group">
                                         <div className="flex justify-between items-start mb-4">
                                             <div className="flex items-center space-x-3">
                                                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-inner">
-                                                    {post.user.name.charAt(0).toUpperCase()}
+                                                    {post.user?.name?.charAt(0).toUpperCase() || '?'}
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-slate-900">{isOwner ? 'You' : post.user.name}</p>
+                                                    <p className="font-bold text-slate-900">{isOwner ? 'You' : post.user?.name || 'Unknown'}</p>
                                                     <p className="text-xs text-slate-500">{new Date(post.createdAt).toLocaleDateString()}</p>
                                                 </div>
                                             </div>
@@ -256,7 +260,7 @@ const Dashboard = () => {
 
                                         {!isOwner && (
                                             <button
-                                                onClick={() => handleInterest(post._id)}
+                                                onClick={() => handleInterest(post)}
                                                 disabled={interestedPosts.includes(post._id)}
                                                 className={`w-full py-2.5 rounded-xl border-2 font-bold transition duration-300 flex items-center justify-center space-x-2 ${interestedPosts.includes(post._id)
                                                     ? 'border-green-200 text-green-700 bg-green-50 cursor-not-allowed'

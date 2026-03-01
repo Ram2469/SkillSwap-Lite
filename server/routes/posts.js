@@ -8,7 +8,7 @@ const router = express.Router();
 // @desc    Get all posts
 router.get('/', async (req, res) => {
     try {
-        const posts = await Post.find().populate('user', 'name').sort({ createdAt: -1 });
+        const posts = await Post.find().populate('user', 'name email').sort({ createdAt: -1 });
         res.json(posts);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -30,7 +30,7 @@ router.post('/', protect, async (req, res) => {
         const createdPost = await post.save();
 
         // Populate user to match GET response format
-        await createdPost.populate('user', 'name');
+        await createdPost.populate('user', 'name email');
 
         res.status(201).json(createdPost);
     } catch (error) {

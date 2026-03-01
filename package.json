@@ -1,0 +1,14 @@
+{
+    "name": "skillswap-root",
+    "version": "1.0.0",
+    "description": "Root package.json for SkillSwap Lite",
+    "scripts": {
+        "start": "npm run start --prefix server",
+        "server": "npm run start --prefix server",
+        "client": "npm run dev --prefix client",
+        "install-all": "npm install --prefix server && npm install --prefix client",
+        "build": "npm run build --prefix client"
+    },
+    "author": "",
+    "license": "ISC"
+}
