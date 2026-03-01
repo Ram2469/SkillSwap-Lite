@@ -50,7 +50,7 @@ router.get('/my', protect, async (req, res) => {
 
         // Find interests related to these posts
         const interests = await Interest.find({ post: { $in: myPostIds } })
-            .populate('interestedUser', 'name')
+            .populate('interestedUser', 'name email')
             .populate('post', 'skillOffered skillWanted')
             .sort({ createdAt: -1 });
 

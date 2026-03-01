@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const Dashboard = () => {
     const [posts, setPosts] = useState([]);
     const [interests, setInterests] = useState([]);
+    const [interestedPosts, setInterestedPosts] = useState([]);
     const [formData, setFormData] = useState({ skillOffered: '', skillWanted: '' });
     const navigate = useNavigate();
 
@@ -96,10 +97,14 @@ const Dashboard = () => {
                 body: JSON.stringify({ postId }),
             });
             if (res.ok) {
-                alert('Interest sent successfully!');
+                setInterestedPosts((prev) => [...prev, postId]);
             } else {
                 const data = await res.json();
-                alert(data.message || 'Action failed');
+                if (data.message === 'Already expressed interest in this post') {
+                    setInterestedPosts((prev) => [...prev, postId]);
+                } else {
+                    alert(data.message || 'Action failed');
+                }
             }
         } catch (error) {
             console.error('Failed to express interest', error);
@@ -169,10 +174,10 @@ const Dashboard = () => {
                             </form>
                         </div>
 
-                        {/* My Interests Section */}
+                        {/* People Interested Section */}
                         <div className="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-slate-100">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-bold text-slate-800">My Interests</h3>
+                                <h3 className="text-lg font-bold text-slate-800">People Interested</h3>
                                 <span className="bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-1 rounded-full">
                                     {interests.length}
                                 </span>
@@ -209,7 +214,7 @@ const Dashboard = () => {
                                                     {post.user.name.charAt(0).toUpperCase()}
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-slate-900">{post.user.name}</p>
+                                                    <p className="font-bold text-slate-900">{isOwner ? 'You' : post.user.name}</p>
                                                     <p className="text-xs text-slate-500">{new Date(post.createdAt).toLocaleDateString()}</p>
                                                 </div>
                                             </div>
@@ -242,10 +247,23 @@ const Dashboard = () => {
                                         {!isOwner && (
                                             <button
                                                 onClick={() => handleInterest(post._id)}
-                                                className="w-full py-2.5 rounded-xl border-2 border-indigo-100 text-indigo-700 font-bold hover:bg-indigo-50 transition duration-300 flex items-center justify-center space-x-2"
+                                                disabled={interestedPosts.includes(post._id)}
+                                                className={`w-full py-2.5 rounded-xl border-2 font-bold transition duration-300 flex items-center justify-center space-x-2 ${interestedPosts.includes(post._id)
+                                                        ? 'border-green-200 text-green-700 bg-green-50 cursor-not-allowed'
+                                                        : 'border-indigo-100 text-indigo-700 hover:bg-indigo-50'
+                                                    }`}
                                             >
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                                <span>I'm Interested</span>
+                                                {interestedPosts.includes(post._id) ? (
+                                                    <>
+                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                                        <span>Interest Sent</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                                        <span>I'm Interested</span>
+                                                    </>
+                                                )}
                                             </button>
                                         )}
                                     </div>
