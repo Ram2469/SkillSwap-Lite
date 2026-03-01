@@ -99,9 +99,6 @@ const Dashboard = () => {
             if (res.ok) {
                 setInterestedPosts((prev) => [...prev, post._id]);
                 alert(`Contact ${post.user.name} at: ${post.user.email}\n\nI am highly interested in your post about ${post.skillOffered} -> ${post.skillWanted}.`);
-                const subject = encodeURIComponent(`Interest in your SkillSwap post (${post.skillOffered} -> ${post.skillWanted})`);
-                const body = encodeURIComponent(`Hi ${post.user.name},\n\nI am highly interested in your post offering ${post.skillOffered} and looking for ${post.skillWanted}.\n\nPlease let me know when you are available to chat!`);
-                window.location.href = `mailto:${post.user.email}?subject=${subject}&body=${body}`;
             } else {
                 const data = await res.json();
                 if (data.message === 'Already expressed interest in this post') {
@@ -196,9 +193,6 @@ const Dashboard = () => {
                                             className="p-3 bg-indigo-50/50 hover:bg-indigo-100/80 cursor-pointer rounded-xl border border-indigo-100 text-sm transition-all duration-300"
                                             onClick={() => {
                                                 alert(`Contact ${interest.interestedUser.name} at: ${interest.interestedUser.email}\n\nI am interested on your post.. ${interest.post.skillOffered} -> ${interest.post.skillWanted}. Please contact me.`);
-                                                const subject = encodeURIComponent(`Regarding your interest in my SkillSwap post`);
-                                                const body = encodeURIComponent(`Hi ${interest.interestedUser.name},\n\nI am interested on your post.. ${interest.post.skillOffered} -> ${interest.post.skillWanted}. Please contact me.`);
-                                                window.location.href = `mailto:${interest.interestedUser.email}?subject=${subject}&body=${body}`;
                                             }}
                                             title={`Click to email ${interest.interestedUser.name}`}
                                         >
