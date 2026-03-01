@@ -187,8 +187,18 @@ const Dashboard = () => {
                                     <p className="text-sm text-slate-500 italic">No one has expressed interest yet.</p>
                                 ) : (
                                     interests.map((interest) => (
-                                        <div key={interest._id} className="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100 text-sm">
-                                            <p className="text-slate-700">
+                                        <div
+                                            key={interest._id}
+                                            className="p-3 bg-indigo-50/50 hover:bg-indigo-100/80 cursor-pointer rounded-xl border border-indigo-100 text-sm transition-all duration-300"
+                                            onClick={() => {
+                                                alert(`Contact ${interest.interestedUser.name} at: ${interest.interestedUser.email}\n\nI am interested on your post.. ${interest.post.skillOffered} -> ${interest.post.skillWanted}. Please contact me.`);
+                                                const subject = encodeURIComponent(`Regarding your interest in my SkillSwap post`);
+                                                const body = encodeURIComponent(`Hi ${interest.interestedUser.name},\n\nI am interested on your post.. ${interest.post.skillOffered} -> ${interest.post.skillWanted}. Please contact me.`);
+                                                window.location.href = `mailto:${interest.interestedUser.email}?subject=${subject}&body=${body}`;
+                                            }}
+                                            title={`Click to email ${interest.interestedUser.name}`}
+                                        >
+                                            <p className="text-slate-700 pointer-events-none">
                                                 <span className="font-bold text-indigo-900">{interest.interestedUser.name}</span> is interested in your <span className="font-semibold text-slate-900">{interest.post.skillOffered}</span> → <span className="font-semibold text-slate-900">{interest.post.skillWanted}</span> post.
                                             </p>
                                         </div>
@@ -249,8 +259,8 @@ const Dashboard = () => {
                                                 onClick={() => handleInterest(post._id)}
                                                 disabled={interestedPosts.includes(post._id)}
                                                 className={`w-full py-2.5 rounded-xl border-2 font-bold transition duration-300 flex items-center justify-center space-x-2 ${interestedPosts.includes(post._id)
-                                                        ? 'border-green-200 text-green-700 bg-green-50 cursor-not-allowed'
-                                                        : 'border-indigo-100 text-indigo-700 hover:bg-indigo-50'
+                                                    ? 'border-green-200 text-green-700 bg-green-50 cursor-not-allowed'
+                                                    : 'border-indigo-100 text-indigo-700 hover:bg-indigo-50'
                                                     }`}
                                             >
                                                 {interestedPosts.includes(post._id) ? (
