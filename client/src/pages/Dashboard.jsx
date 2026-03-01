@@ -19,7 +19,7 @@ const Dashboard = () => {
 
     const fetchPosts = useCallback(async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/posts', {
+            const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/posts', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.ok) {
@@ -33,7 +33,7 @@ const Dashboard = () => {
 
     const fetchInterests = useCallback(async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/interests/my', {
+            const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/interests/my', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.ok) {
@@ -53,7 +53,7 @@ const Dashboard = () => {
     const handleCreatePost = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://localhost:5000/api/posts', {
+            const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/posts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const Dashboard = () => {
 
     const handleDeletePost = async (id) => {
         try {
-            const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
+            const res = await fetch(`https://skillswap-lite-5w8j.onrender.com/api/posts/${id}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -87,7 +87,7 @@ const Dashboard = () => {
 
     const handleInterest = async (postId) => {
         try {
-            const res = await fetch('http://localhost:5000/api/interests', {
+            const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/interests', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
