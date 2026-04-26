@@ -5,6 +5,7 @@ const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -20,6 +21,7 @@ const Login = () => {
             return;
         }
 
+        setIsLoading(true);
         try {
             const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/auth/login', {
                 method: 'POST',
@@ -35,9 +37,11 @@ const Login = () => {
                 navigate('/dashboard');
             } else {
                 setError(data.message || 'Login failed');
+                setIsLoading(false);
             }
         } catch (err) {
             setError('Server error. Please try again later.');
+            setIsLoading(false);
         }
     };
 
@@ -100,9 +104,21 @@ const Login = () => {
                         </div>
                         <button
                             type="submit"
-                            className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 transform hover:-translate-y-0.5 transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            disabled={isLoading}
+                            className={`w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 transform transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isLoading ? 'opacity-80 cursor-not-allowed hover:-translate-y-0' : 'hover:-translate-y-0.5'}`}
                         >
-                            Sign In
+                            {isLoading ? (
+                                <span className="flex items-center justify-center">
+                                    <span>Signing in</span>
+                                    <span className="ml-1.5 flex items-center space-x-1 pb-1">
+                                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                                    </span>
+                                </span>
+                            ) : (
+                                "Sign In"
+                            )}
                         </button>
                     </form>
                     <p className="mt-8 text-center text-sm text-slate-600">
