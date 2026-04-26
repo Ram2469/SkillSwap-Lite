@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -23,7 +24,7 @@ const Login = () => {
 
         setIsLoading(true);
         try {
-            const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/auth/login', {
+            const res = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

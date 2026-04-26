@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 const Dashboard = () => {
     const [posts, setPosts] = useState([]);
@@ -20,7 +21,7 @@ const Dashboard = () => {
 
     const fetchPosts = useCallback(async () => {
         try {
-            const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/posts', {
+            const res = await fetch(`${API_URL}/posts`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.ok) {
@@ -34,7 +35,7 @@ const Dashboard = () => {
 
     const fetchInterests = useCallback(async () => {
         try {
-            const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/interests/my', {
+            const res = await fetch(`${API_URL}/interests/my`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.ok) {
@@ -54,7 +55,7 @@ const Dashboard = () => {
     const handleCreatePost = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/posts', {
+            const res = await fetch(`${API_URL}/posts`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ const Dashboard = () => {
 
     const handleDeletePost = async (id) => {
         try {
-            const res = await fetch(`https://skillswap-lite-5w8j.onrender.com/api/posts/${id}`, {
+            const res = await fetch(`${API_URL}/posts/${id}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -88,7 +89,7 @@ const Dashboard = () => {
 
     const handleInterest = async (post) => {
         try {
-            const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/interests', {
+            const res = await fetch(`${API_URL}/interests`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

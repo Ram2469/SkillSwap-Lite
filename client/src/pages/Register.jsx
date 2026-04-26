@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 const Register = () => {
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -21,7 +22,7 @@ const Register = () => {
         }
 
         try {
-            const res = await fetch('https://skillswap-lite-5w8j.onrender.com/api/auth/register', {
+            const res = await fetch(`${API_URL}/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
