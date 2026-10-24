@@ -7,10 +7,29 @@ const Login = () => {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isFilled, setIsFilled] = useState(null);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleFillGuestCredentials = (guestType) => {
+        if (guestType === 1) {
+            setFormData({
+                email: 'guest1@gmail.com',
+                password: '12345678',
+            });
+            setIsFilled('guest1');
+        } else {
+            setFormData({
+                email: 'guest2@gmail.com',
+                password: '12345678',
+            });
+            setIsFilled('guest2');
+        }
+        setError('');
+        setTimeout(() => setIsFilled(null), 2500);
     };
 
     const handleSubmit = async (e) => {
@@ -55,6 +74,90 @@ const Login = () => {
                 </div>
 
                 <div className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-xl border border-white/50">
+                    {/* Recruiter / Demo Fast-Login Section */}
+                    <div className="mb-6 p-4 bg-gradient-to-br from-indigo-50/90 via-purple-50/60 to-white border border-indigo-100/90 rounded-2xl shadow-sm">
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                                <span className="flex h-2 w-2 relative">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                </span>
+                                <span className="text-xs font-bold text-slate-800 tracking-wider uppercase">Recruiter / Guest Access</span>
+                            </div>
+                            <span className="text-[11px] font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">Click to autofill</span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2.5">
+                            {/* Guest 1 Button */}
+                            <button
+                                type="button"
+                                onClick={() => handleFillGuestCredentials(1)}
+                                className={`p-3 text-left rounded-xl border transition-all duration-200 active:scale-95 group relative ${
+                                    isFilled === 'guest1'
+                                        ? 'bg-emerald-50 border-emerald-400 ring-2 ring-emerald-200 shadow-sm'
+                                        : 'bg-white hover:bg-indigo-50/70 border-slate-200 hover:border-indigo-300 shadow-xs'
+                                }`}
+                                title="Autofill Guest 1 credentials"
+                            >
+                                <div className="flex items-center justify-between mb-1">
+                                    <span className="text-xs font-bold text-slate-800 group-hover:text-indigo-600 transition-colors flex items-center gap-1">
+                                        <span>👤</span> Guest 1
+                                    </span>
+                                    {isFilled === 'guest1' ? (
+                                        <span className="text-[10px] font-bold text-emerald-600 flex items-center gap-0.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Filled!
+                                        </span>
+                                    ) : (
+                                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 group-hover:bg-indigo-100 group-hover:text-indigo-700 transition-colors">
+                                            Autofill
+                                        </span>
+                                    )}
+                                </div>
+                                <p className="text-[11px] text-slate-600 font-mono font-medium truncate">guest1@gmail.com</p>
+                                <p className="text-[10px] text-slate-400 font-mono mt-0.5">pass: 12345678</p>
+                            </button>
+
+                            {/* Guest 2 Button */}
+                            <button
+                                type="button"
+                                onClick={() => handleFillGuestCredentials(2)}
+                                className={`p-3 text-left rounded-xl border transition-all duration-200 active:scale-95 group relative ${
+                                    isFilled === 'guest2'
+                                        ? 'bg-emerald-50 border-emerald-400 ring-2 ring-emerald-200 shadow-sm'
+                                        : 'bg-white hover:bg-purple-50/70 border-slate-200 hover:border-purple-300 shadow-xs'
+                                }`}
+                                title="Autofill Guest 2 credentials"
+                            >
+                                <div className="flex items-center justify-between mb-1">
+                                    <span className="text-xs font-bold text-slate-800 group-hover:text-purple-600 transition-colors flex items-center gap-1">
+                                        <span>👤</span> Guest 2
+                                    </span>
+                                    {isFilled === 'guest2' ? (
+                                        <span className="text-[10px] font-bold text-emerald-600 flex items-center gap-0.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Filled!
+                                        </span>
+                                    ) : (
+                                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 group-hover:bg-purple-100 group-hover:text-purple-700 transition-colors">
+                                            Autofill
+                                        </span>
+                                    )}
+                                </div>
+                                <p className="text-[11px] text-slate-600 font-mono font-medium truncate">guest2@gmail.com</p>
+                                <p className="text-[10px] text-slate-400 font-mono mt-0.5">pass: 12345678</p>
+                            </button>
+                        </div>
+
+                        <p className="mt-2.5 text-[11px] text-slate-500 text-center">
+                            💡 Use <strong className="text-slate-700">Guest 1</strong> to post & <strong className="text-slate-700">Guest 2</strong> to express interest!
+                        </p>
+                    </div>
+
                     {error && (
                         <div className="bg-red-50 text-red-600 p-4 rounded-lg text-sm mb-6 border border-red-100">
                             {error}

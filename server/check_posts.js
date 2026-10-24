@@ -23,6 +23,10 @@ async function run() {
         
         const posts = await postsCollection.find({}).toArray();
         console.log('Posts:', JSON.stringify(posts, null, 2));
+
+        const usersCollection = mongoose.connection.collection('users');
+        const users = await usersCollection.find({}, { projection: { password: 0 } }).toArray();
+        console.log('Users in DB:', JSON.stringify(users, null, 2));
     } catch (err) {
         console.error('Error:', err.message);
     } finally {
